@@ -1,0 +1,36 @@
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+using namespace std;
+string to_string_with_precision(double x, int y){
+    ostringstream stream;
+    stream<<fixed<<setprecision(y)<<x;
+    return stream.str();
+}
+string convert(double val){
+    string suffix="w";
+    if(val/1000000>1){
+        val/=1000000;
+        val=(int)(val*100+0.5);
+        val/=100;
+        suffix="mW";
+    }else if(val/1000>1){
+        val/=1000;
+        val=(int)(val*100+.5);
+        val/=100;
+        suffix="kW";
+    }
+    return(to_string_with_precision(val,2)+suffix);
+}
+string calc(double pvTot, double dayRange){
+    double pvAvg=pvTot/dayRange;
+    double pvMonthAvg = pvTot/(dayRange/30);
+    string value = ("\n{\n\tTotal: " + convert(pvTot)+"\n\tDaily Average: " + convert(pvAvg) +"\n\tMonthly Average: " + convert(pvMonthAvg) + "\n}"); 
+    return value;  
+}
+
+int main()
+{
+    double pvTot = 2362000,dayRange=515; 
+    cout << calc(pvTot, dayRange);
+}
