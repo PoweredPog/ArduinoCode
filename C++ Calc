@@ -1,12 +1,18 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+//removes the use of "std::" to increase readablity 
 using namespace std;
+
+//Sets the double parameter the amount of decimals determined by int parameter
+//returns truncated string (Rounding not included in this function)
 string to_string_with_precision(double x, int y){
     ostringstream stream;
     stream<<fixed<<setprecision(y)<<x;
     return stream.str();
 }
+//1 Way conversion into larger Order of Magnitudes(OOMs), only built for print
+//functions does not change initial value 
 string convert(double val){
     string suffix="w";
     if(val/1000000>1){
@@ -22,15 +28,21 @@ string convert(double val){
     }
     return(to_string_with_precision(val,2)+suffix);
 }
+
+//Calculates(calc) the average wattage in both daily and monthly and eventually
+//will include saved price, only returns a print statment
 string calc(double pvTot, double dayRange){
     double pvAvg=pvTot/dayRange;
     double pvMonthAvg = pvTot/(dayRange/30);
-    string value = ("\n{\n\tTotal: " + convert(pvTot)+"\n\tDaily Average: " + convert(pvAvg) +"\n\tMonthly Average: " + convert(pvMonthAvg) + "\n}"); 
+    string value = 
+    ("\n{\n\tTotal: " + convert(pvTot)
+    + "\n\tDaily Average: " + convert(pvAvg)
+    + "\n\tMonthly Average: " + convert(pvMonthAvg)
+    + "\n}");
     return value;  
 }
 
-int main()
-{
-    double pvTot = 2362000,dayRange=515; 
+int main(){
+    double pvTot = 1200,dayRange=0.89; 
     cout << calc(pvTot, dayRange);
 }
