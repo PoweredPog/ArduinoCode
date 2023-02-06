@@ -41,6 +41,9 @@ string formComma(double val){
     if(cents==0){
         centsStr="";
     }
+    if(cents/10<1){
+        centsStr=".0"+string_precision(cents,0);
+    }
     int value = val;
     while(value>=1000){
         tp=value%1000;
@@ -59,12 +62,16 @@ string calc(double pvTot, double dayRange, double price){
     ("\n{\n\tTotal: " + convert(pvTot)
     + "\n\tDaily Average: " + convert(pvAvg)
     + "\n\tMonthly Average: " + convert(pvMonthAvg)
-    + "\n\tMonthly Average bill $" + formComma(pvMonthAvg*0.0892)
+    + "\n\tMonthly Average bill $" + formComma(pvMonthAvg*price/1000)
     + "\n}");
     return value;  
 }
 
 int main(){
-    double pvTot = 1200,dayRange=0.89,priceKwh=0.10; 
+    double pvTot,dayRange,priceKwh; 
+    cout<< "Please enter Total Energy, the amount of days, and the price per Kwh: \n";
+    cin >> pvTot;
+    cin >> dayRange;
+    cin >> priceKwh;
     cout << calc(pvTot, dayRange, priceKwh);
 }
