@@ -6,7 +6,7 @@ using namespace std;
 
 //Sets the double parameter the amount of decimals determined by int parameter
 //returns truncated string (Rounding not included in this function)
-string to_string_with_precision(double x, int y){
+string string_precision(double x, int y){
     ostringstream stream;
     stream<<fixed<<setprecision(y)<<x;
     return stream.str();
@@ -26,23 +26,45 @@ string convert(double val){
         val/=100;
         suffix="kW";
     }
-    return(to_string_with_precision(val,2)+suffix);
+    return(string_precision(val,2)+suffix);
 }
 
+//Intakes a value as a double and formates it as a money value, rounded to two digits
+string formComma(double val){
+    string concat;
+    string valString=string_precision(val,0);
+    int tp=0;
+    int count = valString.length();
+    int cents = (val*100);
+    cents = cents%100;
+    string centsStr = "."+string_precision(cents,0);
+    if(cents==0){
+        centsStr="";
+    }
+    int value = val;
+    while(value>=1000){
+        tp=value%1000;
+        value/=1000;
+        count-=3;
+        concat+=","+valString.substr(count,3);
+    }
+    return (string_precision(value,0)+concat+centsStr);
+}
 //Calculates(calc) the average wattage in both daily and monthly and eventually
 //will include saved price, only returns a print statment
-string calc(double pvTot, double dayRange){
+string calc(double pvTot, double dayRange, double price){
     double pvAvg=pvTot/dayRange;
     double pvMonthAvg = pvTot/(dayRange/30);
     string value = 
     ("\n{\n\tTotal: " + convert(pvTot)
     + "\n\tDaily Average: " + convert(pvAvg)
     + "\n\tMonthly Average: " + convert(pvMonthAvg)
+    + "\n\tMonthly Average bill $" + formComma(pvMonthAvg*0.0892)
     + "\n}");
     return value;  
 }
 
 int main(){
-    double pvTot = 1200,dayRange=0.89; 
-    cout << calc(pvTot, dayRange);
+    double pvTot = 1200,dayRange=0.89,priceKwh=0.10; 
+    cout << calc(pvTot, dayRange, priceKwh);
 }
