@@ -5,16 +5,19 @@ using namespace std;
 class power_acc{
     public: 
         double watt_total, daysTotal, price;
+        string acc_name;
     //Calculates(calc) the average wattage in both daily and monthly and eventually
     //will include saved price, only returns a print statment
     string to_string(){
         double avg = watt_total/daysTotal;
         double monthAvg = watt_total/(daysTotal/30);
         string value = 
-        ("\n{\n\tTotal: " + convert(watt_total)
+        ("\n{"
+        "\n\tAccount: " + acc_name
+        + "\n\tTotal: " + convert(watt_total)
         + "\n\tDaily Average: " + convert(avg)
         + "\n\tMonthly Average: " + convert(monthAvg)
-        + "\n\tMonthly Average bill $" + formComma(monthAvg*price/1000)
+        + "\n\tMonthly Average bill $" + formComma(monthAvg*(price/1000))
         + "\n}");
         return value;
     }
@@ -66,6 +69,4 @@ class power_acc{
         stream<<fixed<<setprecision(y)<<x;
         return stream.str();
     }
-
-    
 };
